@@ -187,9 +187,13 @@ export default function MolecularGraph({ unlockedEmotions, allEmotionsMap, onNod
           const other = nodes[j];
           const dx = node.x - other.x;
           const dy = node.y - other.y;
+          
+          const minDist = node.radius + other.radius + 35;
+          // Fast bounding box check to avoid expensive square root
+          if (Math.abs(dx) > minDist || Math.abs(dy) > minDist) continue;
+
           let dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < 1) dist = 1;
-          const minDist = node.radius + other.radius + 35;
           if (dist < minDist) {
             const f = (minDist - dist) / dist * 0.06;
             if (!node.pinned) { node.vx += dx * f; node.vy += dy * f; }
@@ -343,38 +347,54 @@ export default function MolecularGraph({ unlockedEmotions, allEmotionsMap, onNod
         const aActive = !activeCat || (a.type === 'category' ? a.id === `cat-${activeCat}` : a.catId === activeCat) || selectedIdsRef.current.includes(a.id);
         const bActive = !activeCat || (b.type === 'category' ? b.id === `cat-${activeCat}` : b.catId === activeCat) || selectedIdsRef.current.includes(b.id);
 
+        const isMobileLocal = W < 768;
+        
         let fillStyleStr;
         if (isHoveredPath) {
           fillStyleStr = 'rgba(255, 255, 255, 0.7)';
         } else if (aActive && bActive) {
-          const grad = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
-          grad.addColorStop(0, a.color);
-          grad.addColorStop(1, b.color);
-          fillStyleStr = grad;
+          if (isMobileLocal) {
+            fillStyleStr = a.color; // Skip gradient on mobile for performance
+          } else {
+            const grad = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
+            grad.addColorStop(0, a.color);
+            grad.addColorStop(1, b.color);
+            fillStyleStr = grad;
+          }
         } else {
           fillStyleStr = 'rgba(200, 200, 200, 0.15)';
         }
 
-        ctx.fillStyle = fillStyleStr;
-        if (aActive && bActive && !isHoveredPath) ctx.globalAlpha = 0.20;
+        if (isMobileLocal && !isHoveredPath && !(aActive && bActive)) {
+          // FAST PATH for inactive links on mobile: 1 curve instead of 35 circles
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, b.x, b.y);
+          ctx.strokeStyle = fillStyleStr;
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+        } else {
+          ctx.fillStyle = fillStyleStr;
+          if (aActive && bActive && !isHoveredPath) ctx.globalAlpha = 0.20;
 
-        const steps = 35;
-        ctx.beginPath();
-        for (let s = 0; s <= steps; s++) {
-          const t = s / steps;
-          const invT = 1 - t;
-          const px = invT*invT*invT*a.x + 3*invT*invT*t*cp1x + 3*invT*t*t*cp2x + t*t*t*b.x;
-          const py = invT*invT*invT*a.y + 3*invT*invT*t*cp1y + 3*invT*t*t*cp2y + t*t*t*b.y;
-          const taper = 4 * (t - 0.5) * (t - 0.5); 
-          const maxThick = Math.min((a.radius + b.radius) * 0.45, 20);
-          const stretchFactor = 400 / Math.max(dist, 10);
-          const minThick = Math.min(maxThick, Math.max(1, stretchFactor));
-          let rad = minThick + (maxThick - minThick) * taper;
-          if (isHoveredPath) rad *= 1.3;
-          ctx.moveTo(px + rad, py);
-          ctx.arc(px, py, rad, 0, Math.PI * 2);
+          const steps = isMobileLocal ? 15 : 35;
+          ctx.beginPath();
+          for (let s = 0; s <= steps; s++) {
+            const t = s / steps;
+            const invT = 1 - t;
+            const px = invT*invT*invT*a.x + 3*invT*invT*t*cp1x + 3*invT*t*t*cp2x + t*t*t*b.x;
+            const py = invT*invT*invT*a.y + 3*invT*invT*t*cp1y + 3*invT*t*t*cp2y + t*t*t*b.y;
+            const taper = 4 * (t - 0.5) * (t - 0.5); 
+            const maxThick = Math.min((a.radius + b.radius) * 0.45, 20);
+            const stretchFactor = 400 / Math.max(dist, 10);
+            const minThick = Math.min(maxThick, Math.max(1, stretchFactor));
+            let rad = minThick + (maxThick - minThick) * taper;
+            if (isHoveredPath) rad *= 1.3;
+            ctx.moveTo(px + rad, py);
+            ctx.arc(px, py, rad, 0, Math.PI * 2);
+          }
+          ctx.fill();
         }
-        ctx.fill();
         ctx.globalAlpha = 1.0;
         if (isHoveredPath || hash % 4 === 0) {
           const tSpeed = isHoveredPath ? 0.0008 : 0.0003;

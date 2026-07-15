@@ -24,7 +24,7 @@ function App() {
   const [rightSelectedId, setRightSelectedId] = useState(null);
   const [maximizedEmotions, setMaximizedEmotions] = useState(null);
   const [isFailed, setIsFailed] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
   const [editMode, setEditMode] = useState(false); // Manual arrangement mode
   const [isChartModalOpen, setIsChartModalOpen] = useState(false);
   const [isListModalOpen, setIsListModalOpen] = useState(false);
@@ -57,10 +57,6 @@ function App() {
     localStorage.setItem('usedEmotions', JSON.stringify(usedEmotionIds));
   }, [usedEmotionIds]);
 
-  const handleMouseMove = (e) => {
-    setMousePos({ x: e.clientX, y: e.clientY });
-  };
-
   const unlockedEmotionsList = unlockedEmotionIds
     .map(id => allEmotions.get(id))
     .filter(Boolean);
@@ -72,6 +68,11 @@ function App() {
   };
 
   const handleNodeClick = (id, side) => {
+    // Reset hints when selection changes
+    setFailedAttempts(0);
+    setFailedHintId(null);
+    setHintedEmotion(null);
+
     setFocusEmotionId(null);
     markUsed(id);
     if (id === hintedEmotion) {
@@ -105,6 +106,9 @@ function App() {
   };
 
   const handleDrop = (emotionId, position) => {
+    setFailedAttempts(0);
+    setFailedHintId(null);
+    setHintedEmotion(null);
     if (position === 'left') {
       setLeftSelectedId(emotionId);
     } else {
@@ -113,6 +117,9 @@ function App() {
   };
 
   const handleClearSlot = (position) => {
+    setFailedAttempts(0);
+    setFailedHintId(null);
+    setHintedEmotion(null);
     if (position === 'left') setLeftSelectedId(null);
     else setRightSelectedId(null);
   };
@@ -150,11 +157,33 @@ function App() {
       setIsFailed(true);
       if (navigator.vibrate) navigator.vibrate([200]); // vibrate on error
 
-      if (dynamic.length > 0) {
-        setFailedHintId(dynamic[0].result.id);
-      } else {
-        setFailedHintId(null);
-      }
+      setFailedAttempts(prev => {
+        const nextAttempts = prev + 1;
+        
+        if (nextAttempts === 1) {
+          setFailedHintId(null);
+          setHintedEmotion(null);
+        } else if (nextAttempts === 2) {
+          if (dynamic.length > 0) {
+            setFailedHintId(dynamic[0].result.id);
+          }
+          setHintedEmotion(null);
+        } else if (nextAttempts >= 3) {
+          if (dynamic.length > 0) {
+            const targetId = dynamic[0].result.id;
+            setFailedHintId(targetId);
+            
+            // Find the missing ingredient for this target
+            const comboForTarget = combinations.find(c => c.result.id === targetId && (c.primary === leftSelectedId || c.secondary === leftSelectedId || c.primary === rightSelectedId || c.secondary === rightSelectedId));
+            if (comboForTarget) {
+              const missingIngId = (comboForTarget.primary === leftSelectedId || comboForTarget.primary === rightSelectedId) ? comboForTarget.secondary : comboForTarget.primary;
+              setHintedEmotion(missingIngId);
+            }
+          }
+        }
+        
+        return nextAttempts;
+      });
 
       setTimeout(() => {
         setIsFailed(false);
@@ -164,7 +193,7 @@ function App() {
   };
 
   return (
-    <div className="app-container" onMouseMove={handleMouseMove}>
+    <div className="app-container">
       
       <div className="progress-header">
         <h1 className="progress-title">Odkryto Emocji</h1>
