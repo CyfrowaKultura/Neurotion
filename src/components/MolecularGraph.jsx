@@ -58,10 +58,6 @@ export default function MolecularGraph({ unlockedEmotions, allEmotionsMap, onNod
     const catKeys = Object.keys(grouped);
     const catCount = catKeys.length;
 
-    const tempCanvas = document.createElement('canvas');
-    const tempCtx = tempCanvas.getContext('2d');
-    tempCtx.font = 'bold 10px Outfit, sans-serif';
-
     catKeys.forEach((catId, catIdx) => {
       const catData = categories.find(c => c.id === catId);
       const emotions = grouped[catId];
@@ -80,16 +76,13 @@ export default function MolecularGraph({ unlockedEmotions, allEmotionsMap, onNod
       const prev = nodesRef.current.find(n => n.id === `cat-${catId}`);
 
       const isMobile = window.innerWidth <= 768;
-      const textWidth = tempCtx.measureText(catData.name).width;
-      const minRadius = isMobile ? 22 : 32;
-      const dynamicRadius = Math.max(minRadius, (textWidth / 2) + (isMobile ? 8 : 12));
 
       const catNode = {
         id: `cat-${catId}`,
         type: 'category',
         label: catData.name,
         color: catData.color,
-        radius: dynamicRadius,
+        radius: isMobile ? 34 : 44,
         x: prev ? prev.x : cx,
         y: prev ? prev.y : cy,
         vx: 0, vy: 0,
@@ -497,7 +490,9 @@ export default function MolecularGraph({ unlockedEmotions, allEmotionsMap, onNod
           const isSelectedCat = activeCat && n.id === `cat-${activeCat}`;
           ctx.font = isSelectedCat ? 'bold 10px Outfit, sans-serif' : 'bold 9px Outfit, sans-serif';
           ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-          ctx.fillStyle = isActive ? n.color : '#bbb';
+          let textColor = n.color;
+          if (isActive && n.color.toUpperCase() === '#FFEB3B') textColor = '#D4B300';
+          ctx.fillStyle = isActive ? textColor : '#bbb';
           ctx.fillText(n.label, n.x, n.y);
         } else {
           const isIngredient = ingredientIndices.includes(i);

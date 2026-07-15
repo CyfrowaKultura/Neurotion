@@ -56,10 +56,20 @@ export default function CombinationHints({ leftEmotion, rightEmotion, unlockedEm
     <div style={{
       display: 'flex',
       gap: '12px',
-      justifyContent: 'center',
+      justifyContent: hints.length > 3 && window.innerWidth <= 768 ? 'flex-start' : 'center',
       marginBottom: '16px',
-      height: '32px' // Fixed height so it doesn't jump
+      height: '42px', // Slightly taller
+      width: '100%',
+      overflowX: 'auto',
+      overflowY: 'hidden',
+      WebkitOverflowScrolling: 'touch',
+      scrollbarWidth: 'none', // Firefox
+      msOverflowStyle: 'none', // IE/Edge
+      padding: '0 16px',
+      boxSizing: 'border-box'
     }}>
+      <style>{`.hide-scrollbar::-webkit-scrollbar { display: none; }`}</style>
+      <div className="hide-scrollbar" style={{ display: 'flex', gap: '12px', width: 'max-content', margin: hints.length <= 3 || window.innerWidth > 768 ? '0 auto' : '0' }}>
       <AnimatePresence mode="popLayout">
         {hints.map((hint, i) => {
           const isUnlocked = unlockedEmotionIds.includes(hint.id);
@@ -102,6 +112,7 @@ export default function CombinationHints({ leftEmotion, rightEmotion, unlockedEm
           );
         })}
       </AnimatePresence>
+      </div>
     </div>
   );
 }

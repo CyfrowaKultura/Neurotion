@@ -144,19 +144,15 @@ function App() {
       const nextFailed = failedAttempts + 1;
       setFailedAttempts(nextFailed);
       
-      console.log(`Failed attempt #${nextFailed}`);
-
       if (nextFailed >= 3 && !hintedEmotion) {
         const availableCombos = combinations.filter(c => 
            !unlockedEmotionIds.includes(c.result.id) &&
            unlockedEmotionIds.includes(c.ingredients[0]) &&
            unlockedEmotionIds.includes(c.ingredients[1])
         );
-        console.log(`Found ${availableCombos.length} available combos for hinting.`);
         if (availableCombos.length > 0) {
           const randomCombo = availableCombos[Math.floor(Math.random() * availableCombos.length)];
           const hint = randomCombo.ingredients[Math.floor(Math.random() * 2)];
-          console.log("HINTING EMOTION:", hint);
           setHintedEmotion(hint);
         }
       }
@@ -172,7 +168,6 @@ function App() {
   return (
     <div className="app-container" onMouseMove={handleMouseMove}>
       
-      {/* Progress Header */}
       <div className="progress-header">
         <h1 className="progress-title">Odkryto Emocji</h1>
         <div className="discovery-stats">
@@ -188,6 +183,13 @@ function App() {
             title="Tryb manualnej edycji układu"
           >
             <Pencil size={18} />
+          </button>
+          <button 
+            className="chart-mode-btn"
+            onClick={() => setIsListModalOpen(true)}
+            title="Księga Emocji (Lista)"
+          >
+            <BookOpen size={18} />
           </button>
           <button 
             className="chart-mode-btn"
@@ -266,6 +268,14 @@ function App() {
           setMaximizedEmotions(null);
           setFocusEmotionId(emotion.id);
         }}
+        onAssignSlot1={(id) => {
+          setLeftSelectedId(id);
+          setMaximizedEmotions(null);
+        }}
+        onAssignSlot2={(id) => {
+          setRightSelectedId(id);
+          setMaximizedEmotions(null);
+        }}
       />
 
       <EmotionChartModal 
@@ -274,6 +284,17 @@ function App() {
         allEmotionsMap={allEmotions}
         onDotClick={(e) => setMaximizedEmotions([e])}
         unlockedEmotionIds={unlockedEmotionIds}
+      />
+
+      <EmotionListModal
+        isOpen={isListModalOpen}
+        onClose={() => setIsListModalOpen(false)}
+        unlockedEmotionIds={unlockedEmotionIds}
+        allEmotionsMap={allEmotions}
+        onEmotionClick={(e) => {
+          setIsListModalOpen(false);
+          setMaximizedEmotions([e]);
+        }}
       />
     </div>
   );

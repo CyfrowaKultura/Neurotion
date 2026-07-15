@@ -1,0 +1,144 @@
+.emotion-list-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(10, 10, 10, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.emotion-list-content {
+  background: rgba(255, 255, 255, 0.9);
+  width: 100%;
+  max-width: 600px;
+  height: 85vh;
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.emotion-list-header {
+  padding: 30px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.emotion-list-header h2 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #222;
+  margin: 0;
+}
+
+.emotion-list-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 30px;
+}
+
+.emotion-category-group {
+  margin-bottom: 40px;
+}
+
+.category-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+  border-bottom: 2px solid;
+  padding-bottom: 8px;
+  display: inline-block;
+}
+
+.emotion-item {
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.emotion-item:hover {
+  background: rgba(0, 0, 0, 0.04);
+  transform: translateY(-2px);
+}
+
+.emotion-item-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.emotion-color-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.emotion-item-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #222;
+}
+
+.emotion-item-ingredients {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: #666;
+  padding-left: 24px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ingredient-tag {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.ingredient-tag:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .emotion-list-content {
+    height: 90vh;
+  }
+  
+  .emotion-list-header {
+    padding: 20px;
+  }
+  
+  .emotion-list-body {
+    padding: 16px;
+  }
+  
+  .global-close-btn {
+    top: 15px !important;
+    right: 15px !important;
+  }
+}

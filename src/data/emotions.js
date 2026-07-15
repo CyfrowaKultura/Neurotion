@@ -117,7 +117,8 @@ const matrixData = [
   { pri: 'fear', sec: 'joy',          id: 'protective',    name: 'Ochrona',      desc: 'Gotowość do działania w obronie czegoś cennego przed potencjalnym zagrożeniem.' },
   { pri: 'fear', sec: 'trust',        id: 'nervous',       name: 'Nerwowość',    desc: 'Uczucie napięcia i niepokoju w relacjach, gdzie boimy się zawieść zaufanie.' },
   { pri: 'fear', sec: 'fear',         id: 'terror',        name: 'Przerażenie',  desc: 'Skrajna, paraliżująca forma strachu odbierająca zdolność racjonalnego myślenia.' },
-  { pri: 'fear', sec: 'surprise',     id: 'awe',           name: 'Trwoga / Podziw', desc: 'Złożone uczucie paraliżującego respektu i fascynacji wobec czegoś niewytłumaczalnie potężnego i nagłego.' },
+  { pri: 'fear', sec: 'surprise',     id: 'awe',           name: 'Trwoga', desc: 'Złożone uczucie paraliżującego respektu i fascynacji wobec czegoś niewytłumaczalnie potężnego i nagłego.' },
+  { pri: 'trust', sec: 'surprise',    id: 'admiration',    name: 'Podziw', desc: 'Głęboki szacunek i zachwyt nad cechami lub osiągnięciami, łączący zaufanie z radosnym zaskoczeniem.' },
   { pri: 'fear', sec: 'sadness',      id: 'vulnerability', name: 'Wrażliwość',   desc: 'Bolesna świadomość własnej słabości i podatności na zranienie.' },
   { pri: 'fear', sec: 'disgust',      id: 'abhorrence',    name: 'Odraza',       desc: 'Silny wstręt i przerażenie wobec czegoś moralnie lub fizycznie obrzydliwego.' },
 

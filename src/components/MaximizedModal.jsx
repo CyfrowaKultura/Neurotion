@@ -5,7 +5,7 @@ import { combinations } from '../data/emotions';
 import EmotionChart from './EmotionChart';
 import './MaximizedModal.css';
 
-export default function MaximizedModal({ emotions, isOpen, onClose, unlockedEmotionIds, allEmotionsMap, onShowOnMap }) {
+export default function MaximizedModal({ emotions, isOpen, onClose, unlockedEmotionIds, allEmotionsMap, onShowOnMap, onAssignSlot1, onAssignSlot2 }) {
   const [activeView, setActiveView] = useState('info'); // 'info' or 'map'
 
   if (!isOpen || !emotions || emotions.length === 0) return null;
@@ -65,6 +65,8 @@ export default function MaximizedModal({ emotions, isOpen, onClose, unlockedEmot
             width: isMobile ? '100%' : '95%',
             margin: '0 auto',
             justifyItems: 'center',
+            alignItems: 'center',
+            pointerEvents: 'none',
             maxHeight: '90vh',
             overflowY: 'auto',
             padding: isMobile ? '40px 10px' : '40px 20px',
@@ -79,8 +81,19 @@ export default function MaximizedModal({ emotions, isOpen, onClose, unlockedEmot
             return (
               <motion.div 
                 key={emotion.id}
-                className="modal-content minimal-panel"
-                style={{ 
+                className="modal-card"
+                initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -20, scale: 0.9 }}
+                transition={{ 
+                  type: "spring", 
+                  damping: 25, 
+                  stiffness: 300,
+                  delay: index * 0.05 
+                }}
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  pointerEvents: 'auto',
                   '--modal-color': emotion.color, 
                   width: '100%', 
                   maxWidth: isSingle ? '1000px' : '450px',
@@ -88,23 +101,47 @@ export default function MaximizedModal({ emotions, isOpen, onClose, unlockedEmot
                   display: isSingle && !isMobile ? 'grid' : 'block',
                   gridTemplateColumns: isSingle && !isMobile ? '400px 1fr' : '1fr',
                   gap: isSingle && !isMobile ? '32px' : '0',
-                  padding: isMobile ? '24px 20px' : (isSingle ? '32px' : '40px')
+                  padding: isMobile ? '24px 20px' : (isSingle ? '32px' : '40px'),
+                  boxShadow: `0 0 40px ${emotion.color}33`
                 }}
-                initial={{ scale: 0.8, y: 30, opacity: 0 }}
-                animate={{ scale: 1, y: 0, opacity: 1 }}
-                exit={{ scale: 0.8, y: 30, opacity: 0 }}
-                transition={{ delay: index * 0.05, type: "spring", damping: 25, stiffness: 300 }}
               >
-                <div className="modal-top-accent" style={{ background: emotion.color }}></div>
-                
+                {/* INFO PANEL */}
                 {(!isMobile || activeView === 'info') && (
                   <div className="modal-left-col" style={{ 
                     display: 'flex', 
                     flexDirection: 'column', 
                     justifyContent: 'center', 
                     position: 'relative',
-                    height: isMobile ? '550px' : 'auto'
+                    minHeight: isMobile ? '480px' : 'auto'
                   }}>
+                    {/* Slot Assignment Buttons */}
+                    <div style={{ position: 'absolute', top: '0px', left: '0px', zIndex: 10, display: 'flex', gap: '8px' }}>
+                      <button 
+                        onClick={() => onAssignSlot1 && onAssignSlot1(emotion.id)}
+                        style={{
+                          width: '32px', height: '32px', borderRadius: '50%',
+                          background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.1)',
+                          cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          fontFamily: 'Outfit, sans-serif', fontWeight: 'bold', color: '#555'
+                        }}
+                        title="Umieść w slocie 1"
+                      >
+                        1
+                      </button>
+                      <button 
+                        onClick={() => onAssignSlot2 && onAssignSlot2(emotion.id)}
+                        style={{
+                          width: '32px', height: '32px', borderRadius: '50%',
+                          background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.1)',
+                          cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          fontFamily: 'Outfit, sans-serif', fontWeight: 'bold', color: '#555'
+                        }}
+                        title="Umieść w slocie 2"
+                      >
+                        2
+                      </button>
+                    </div>
+
                     {isMobile && isSingle && (
                       <button 
                         onClick={() => setActiveView('map')}
