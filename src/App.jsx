@@ -173,10 +173,27 @@ function App() {
             const targetId = dynamic[0].result.id;
             setFailedHintId(targetId);
             
-            // Find the missing ingredient for this target
-            const comboForTarget = combinations.find(c => c.result.id === targetId && (c.primary === leftSelectedId || c.secondary === leftSelectedId || c.primary === rightSelectedId || c.secondary === rightSelectedId));
+            // Find a PREDEFINED recipe for this target
+            let predefinedCombos = combinations.filter(c => c.result.id === targetId && !c.isDynamic);
+            
+            // Try to find one that shares an ingredient with the current selection
+            let comboForTarget = predefinedCombos.find(c => c.primary === leftSelectedId || c.secondary === leftSelectedId || c.primary === rightSelectedId || c.secondary === rightSelectedId);
+            
+            if (!comboForTarget && predefinedCombos.length > 0) {
+              comboForTarget = predefinedCombos[0];
+            }
+
             if (comboForTarget) {
-              const missingIngId = (comboForTarget.primary === leftSelectedId || comboForTarget.primary === rightSelectedId) ? comboForTarget.secondary : comboForTarget.primary;
+              let missingIngId = null;
+              if (comboForTarget.primary === leftSelectedId || comboForTarget.primary === rightSelectedId) {
+                missingIngId = comboForTarget.secondary;
+              } else if (comboForTarget.secondary === leftSelectedId || comboForTarget.secondary === rightSelectedId) {
+                missingIngId = comboForTarget.primary;
+              } else {
+                // If it shares neither, hint one of the ingredients
+                missingIngId = comboForTarget.primary;
+              }
+              
               setHintedEmotion(missingIngId);
             }
           }
