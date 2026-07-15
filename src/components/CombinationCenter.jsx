@@ -115,6 +115,7 @@ export default function CombinationCenter({ isMobile, leftEmotion, rightEmotion,
         allEmotionsMap={allEmotionsMap} 
         failedHintId={failedHintId}
         onHintClick={onHintClick}
+        isMobile={isMobile}
       />
 
       <div className="slots-container">

@@ -508,7 +508,8 @@ export default function MolecularGraph({ unlockedEmotions, allEmotionsMap, onNod
 
         if (n.type === 'category') {
           const isSelectedCat = activeCat && n.id === `cat-${activeCat}`;
-          ctx.font = isSelectedCat ? 'bold 10px Outfit, sans-serif' : 'bold 9px Outfit, sans-serif';
+          // Reduce font size slightly so it fits inside the circle on mobile
+          ctx.font = isSelectedCat ? 'bold 8.5px Outfit, sans-serif' : 'bold 7.5px Outfit, sans-serif';
           ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
           let textColor = n.color;
           if (isActive && n.color.toUpperCase() === '#FFEB3B') textColor = '#D4B300';

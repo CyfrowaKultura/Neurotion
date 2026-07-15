@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Lock } from 'lucide-react';
 import { combinations } from '../data/emotions'; // To filter only combinations
 
-export default function CombinationHints({ leftEmotion, rightEmotion, unlockedEmotionIds, allEmotionsMap, failedHintId, onHintClick }) {
+export default function CombinationHints({ leftEmotion, rightEmotion, unlockedEmotionIds, allEmotionsMap, failedHintId, onHintClick, isMobile }) {
   const hints = useMemo(() => {
     if (!leftEmotion || !rightEmotion || !allEmotionsMap) return [];
 
@@ -53,25 +53,27 @@ export default function CombinationHints({ leftEmotion, rightEmotion, unlockedEm
   if (!leftEmotion || !rightEmotion) return null;
 
   return (
-    <div className="hide-scrollbar" style={{
+      <div className="hide-scrollbar" style={{
       display: 'flex',
       width: '100%',
-      overflowX: 'auto',
-      overflowY: 'hidden',
+      overflowX: isMobile ? 'visible' : 'auto',
+      overflowY: 'visible',
       WebkitOverflowScrolling: 'touch',
       scrollbarWidth: 'none', // Firefox
       msOverflowStyle: 'none', // IE/Edge
-      padding: '0 16px',
+      padding: isMobile ? '0 12px' : '0 16px',
       boxSizing: 'border-box',
       marginBottom: '16px',
-      height: '42px',
+      minHeight: '42px',
     }}>
       <style>{`.hide-scrollbar::-webkit-scrollbar { display: none; }`}</style>
       <div style={{ 
         display: 'flex', 
-        gap: '12px', 
-        width: 'max-content',
-        padding: '0 16px', // Add some padding so it doesn't touch the edge when scrolled
+        gap: isMobile ? '8px' : '12px', 
+        width: isMobile ? '100%' : 'max-content',
+        flexWrap: isMobile ? 'wrap' : 'nowrap',
+        justifyContent: isMobile ? 'center' : 'flex-start',
+        padding: isMobile ? '0' : '0 16px', // Removed extra padding on mobile to maximize space
         margin: '0' // explicitly remove margin auto
       }}>
       <AnimatePresence mode="popLayout">
@@ -99,15 +101,17 @@ export default function CombinationHints({ leftEmotion, rightEmotion, unlockedEm
                 gap: '6px',
                 background: isHighlighted ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.03)',
                 border: '1px solid',
-                padding: '4px 12px',
+                padding: isMobile ? '4px 8px' : '4px 12px',
                 borderRadius: '16px',
                 color: isUnlocked ? '#333' : '#888',
-                fontSize: '0.8rem',
+                fontSize: isMobile ? '0.75rem' : '0.8rem',
                 backdropFilter: 'blur(10px)',
                 cursor: 'pointer',
                 fontWeight: isHighlighted ? 'bold' : 'normal',
                 flexShrink: 0,
-                whiteSpace: 'nowrap'
+                width: isMobile ? 'calc(50% - 4px)' : 'auto',
+                boxSizing: 'border-box',
+                overflow: 'hidden'
               }}
             >
               <div style={{
@@ -119,10 +123,11 @@ export default function CombinationHints({ leftEmotion, rightEmotion, unlockedEm
                 flexShrink: 0
               }} />
               {isUnlocked ? (
-                <span style={{ fontWeight: 500 }}>{hint.name}</span>
+                <span style={{ fontWeight: 500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{hint.name}</span>
               ) : (
-                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  {hint.name} <Lock size={10} style={{ opacity: 0.5, marginLeft: '2px' }} />
+                <span style={{ display: 'flex', alignItems: 'center', gap: '4px', overflow: 'hidden' }}>
+                  <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{hint.name}</span>
+                  <Lock size={10} style={{ opacity: 0.5, marginLeft: '2px', flexShrink: 0 }} />
                 </span>
               )}
             </motion.div>
