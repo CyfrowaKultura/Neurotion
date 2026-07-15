@@ -1,0 +1,74 @@
+.emotion-card-wrapper {
+  position: relative;
+  user-select: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.emotion-card-inner {
+  width: 100px;
+  height: 100px;
+  cursor: grab;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  background: white;
+  border-radius: 50%;
+  border: 1px solid var(--border-light);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+  overflow: hidden;
+}
+
+.emotion-card-wrapper:active .emotion-card-inner {
+  cursor: grabbing;
+}
+
+.emotion-card-wrapper:hover .emotion-card-inner {
+  transform: scale(1.15); /* Powiekszenie po najechaniu */
+  border-color: var(--card-color);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.emotion-card-wrapper.selected .emotion-card-inner {
+  border-color: var(--card-color);
+  border-width: 2px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transform: scale(1.1); /* Zachowaj powiększenie, jeśli wybrano */
+}
+
+.card-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+}
+
+.emotion-card-wrapper.is-category .emotion-card-inner {
+  border-width: 2px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.card-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: center;
+  color: var(--text-main);
+  word-wrap: break-word;
+  line-height: 1.2;
+}
+
+@media (max-width: 768px) {
+  .emotion-card-inner {
+    width: 80px;
+    height: 80px;
+  }
+  .card-name {
+    font-size: 0.75rem;
+  }
+}

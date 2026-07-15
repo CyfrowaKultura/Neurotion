@@ -1,0 +1,38 @@
+.molecular-canvas {
+  position: absolute;
+  top: 0;
+  height: 100%;
+}
+
+.molecular-canvas.left {
+  left: 0;
+  width: 50%;
+  z-index: 5;
+}
+
+.molecular-canvas.right {
+  left: 50%;
+  width: 50%;
+  z-index: 5;
+}
+
+@media (max-width: 768px) {
+  .molecular-canvas {
+    width: 100% !important;
+    height: 50% !important;
+    left: 0 !important;
+  }
+  .molecular-canvas.left {
+    top: 0 !important;
+  }
+  .molecular-canvas.right {
+    top: 50% !important;
+  }
+  .molecular-canvas.mobile {
+    width: 100% !important;
+    height: 100% !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 5;
+  }
+}

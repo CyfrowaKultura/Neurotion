@@ -1,0 +1,162 @@
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--bg-main);
+  background: radial-gradient(circle at center, var(--bg-main) 0%, #e0dfd9 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+
+/* --- Progress Header --- */
+.progress-header {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.progress-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.progress-bar-container {
+  width: 200px;
+  height: 4px;
+  background: rgba(0,0,0,0.05);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: var(--text-main);
+  border-radius: 4px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-text {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+/* --- Layout --- */
+
+.dock-section {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  pointer-events: auto;
+  /* Add subtle glass effect behind the dock */
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(8px);
+  padding: 15px 30px;
+  border-radius: 40px;
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+}
+
+/* Clean up background glowing - we want minimal style */
+.bg-glow {
+  display: none;
+}
+
+/* Removed center section and broken media query */
+
+.discovery-stats {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 4px 12px;
+  border-radius: 20px;
+  pointer-events: auto;
+}
+
+.stats-number {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.stats-divider {
+  font-size: 0.9rem;
+  color: rgba(0,0,0,0.3);
+}
+
+.stats-total {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: rgba(0,0,0,0.5);
+}
+
+.stats-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-left: 6px;
+  color: rgba(0,0,0,0.4);
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+  pointer-events: auto;
+}
+
+.edit-mode-btn, .chart-mode-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.5);
+  color: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.edit-mode-btn:hover, .chart-mode-btn:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: scale(1.05);
+}
+
+.edit-mode-btn.active {
+  background: #3b82f6;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .progress-header {
+    top: 10px;
+    gap: 4px;
+    width: 90%;
+  }
+  .progress-title {
+    font-size: 0.7rem;
+  }
+  .progress-bar-container {
+    width: 150px;
+  }
+  .app-container {
+    flex-direction: row; /* keeping side-by-side because uncluttered */
+  }
+}

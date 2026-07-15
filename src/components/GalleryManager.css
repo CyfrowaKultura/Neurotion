@@ -1,0 +1,36 @@
+.gallery-manager {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.gallery-manager.left {
+  flex-direction: row;
+}
+
+.gallery-manager.right {
+  flex-direction: row-reverse;
+}
+
+.column {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.category-column {
+  width: 120px;
+  z-index: 10;
+  background: var(--bg-main); /* to cover sliding elements if needed */
+}
+
+.emotion-column {
+  z-index: 5;
+  overflow: hidden;
+}
+
+/* FanGallery now receives 'items' which can be categories or emotions.
+   So we just ensure columns have proper widths. */

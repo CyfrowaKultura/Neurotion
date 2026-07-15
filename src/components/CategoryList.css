@@ -1,0 +1,23 @@
+.category-list-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.category-item-wrapper {
+  transition: transform 0.3s ease;
+}
+
+/* Slightly scale up the selected category so it's obvious */
+.category-item-wrapper:has(.selected) {
+  transform: scale(1.1);
+}
