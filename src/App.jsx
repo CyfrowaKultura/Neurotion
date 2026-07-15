@@ -4,7 +4,8 @@ import CombinationCenter from './components/CombinationCenter';
 import MaximizedModal from './components/MaximizedModal';
 import { initialEmotions, getCombination, getAllEmotionsMap, combinations } from './data/emotions';
 import EmotionChartModal from './components/EmotionChartModal';
-import { Pencil, Grid } from 'lucide-react';
+import EmotionListModal from './components/EmotionListModal';
+import { Pencil, Grid, BookOpen } from 'lucide-react';
 import './App.css';
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [editMode, setEditMode] = useState(false); // Manual arrangement mode
   const [isChartModalOpen, setIsChartModalOpen] = useState(false);
+  const [isListModalOpen, setIsListModalOpen] = useState(false);
   const [failedAttempts, setFailedAttempts] = useState(0);
   const [hintedEmotion, setHintedEmotion] = useState(null);
   const [focusEmotionId, setFocusEmotionId] = useState(null);
