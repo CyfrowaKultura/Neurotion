@@ -112,7 +112,12 @@ export default function MaximizedModal({ emotions, isOpen, onClose, unlockedEmot
                     flexDirection: 'column', 
                     justifyContent: 'center', 
                     position: 'relative',
-                    minHeight: isMobile ? '480px' : 'auto'
+                    minHeight: isMobile ? '480px' : 'auto',
+                    background: (!isMobile && isSingle) ? 'rgba(255,255,255,0.05)' : 'transparent',
+                    borderRadius: '16px',
+                    border: (!isMobile && isSingle) ? '1px solid rgba(255,255,255,0.1)' : 'none',
+                    padding: (!isMobile && isSingle) ? '2.5rem' : '0',
+                    boxSizing: 'border-box'
                   }}>
                     {/* Slot Assignment Buttons */}
                     {isUnlocked && (
