@@ -58,6 +58,10 @@ export default function MolecularGraph({ unlockedEmotions, allEmotionsMap, onNod
     const catKeys = Object.keys(grouped);
     const catCount = catKeys.length;
 
+    const tempCanvas = document.createElement('canvas');
+    const tempCtx = tempCanvas.getContext('2d');
+    tempCtx.font = 'bold 10px Outfit, sans-serif';
+
     catKeys.forEach((catId, catIdx) => {
       const catData = categories.find(c => c.id === catId);
       const emotions = grouped[catId];
@@ -76,12 +80,16 @@ export default function MolecularGraph({ unlockedEmotions, allEmotionsMap, onNod
       const prev = nodesRef.current.find(n => n.id === `cat-${catId}`);
 
       const isMobile = window.innerWidth <= 768;
+      const textWidth = tempCtx.measureText(catData.name).width;
+      const minRadius = isMobile ? 22 : 32;
+      const dynamicRadius = Math.max(minRadius, (textWidth / 2) + (isMobile ? 8 : 12));
+
       const catNode = {
         id: `cat-${catId}`,
         type: 'category',
         label: catData.name,
         color: catData.color,
-        radius: isMobile ? 20 : 30,
+        radius: dynamicRadius,
         x: prev ? prev.x : cx,
         y: prev ? prev.y : cy,
         vx: 0, vy: 0,
