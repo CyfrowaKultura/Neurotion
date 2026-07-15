@@ -123,36 +123,6 @@ export default function MaximizedModal({ emotions, isOpen, onClose, unlockedEmot
                     padding: (!isMobile && isSingle) ? '2.5rem' : '0',
                     boxSizing: 'border-box'
                   }}>
-                    {/* Slot Assignment Buttons */}
-                    {isUnlocked && (
-                      <div style={{ position: 'absolute', top: '0px', left: '0px', zIndex: 10, display: 'flex', gap: '8px' }}>
-                        <button 
-                          onClick={() => onAssignSlot1 && onAssignSlot1(emotion.id)}
-                          style={{
-                            width: '32px', height: '32px', borderRadius: '50%',
-                            background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.1)',
-                            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            fontFamily: 'Outfit, sans-serif', fontWeight: 'bold', color: '#555'
-                          }}
-                          title="Umieść w slocie 1"
-                        >
-                          1
-                        </button>
-                        <button 
-                          onClick={() => onAssignSlot2 && onAssignSlot2(emotion.id)}
-                          style={{
-                            width: '32px', height: '32px', borderRadius: '50%',
-                            background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.1)',
-                            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            fontFamily: 'Outfit, sans-serif', fontWeight: 'bold', color: '#555'
-                          }}
-                          title="Umieść w slocie 2"
-                        >
-                          2
-                        </button>
-                      </div>
-                    )}
-
                     {isMobile && isSingle && (
                       <button 
                         onClick={() => setActiveView('map')}
@@ -162,6 +132,36 @@ export default function MaximizedModal({ emotions, isOpen, onClose, unlockedEmot
                       </button>
                     )}
                     <div className="modal-header">
+                      {/* Slot Assignment Buttons */}
+                      {isUnlocked && (
+                        <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
+                          <button 
+                            onClick={() => onAssignSlot1 && onAssignSlot1(emotion.id)}
+                            style={{
+                              width: '32px', height: '32px', borderRadius: '50%',
+                              background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.1)',
+                              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                              fontFamily: 'Outfit, sans-serif', fontWeight: 'bold', color: '#555'
+                            }}
+                            title="Umieść w slocie 1"
+                          >
+                            1
+                          </button>
+                          <button 
+                            onClick={() => onAssignSlot2 && onAssignSlot2(emotion.id)}
+                            style={{
+                              width: '32px', height: '32px', borderRadius: '50%',
+                              background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.1)',
+                              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                              fontFamily: 'Outfit, sans-serif', fontWeight: 'bold', color: '#555'
+                            }}
+                            title="Umieść w slocie 2"
+                          >
+                            2
+                          </button>
+                        </div>
+                      )}
+                      
                       <h2 className="modal-title" style={{ color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                         {emotion.name}
                         {!isUnlocked && <span style={{ fontSize: '12px', background: 'rgba(0,0,0,0.1)', padding: '2px 8px', borderRadius: '10px', color: '#666' }}>Nieodkryte</span>}
