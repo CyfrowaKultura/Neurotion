@@ -73,20 +73,22 @@ export default function CombinationCenter({ isMobile, leftEmotion, rightEmotion,
               style={{ '--slot-color': emotion.color }}
               onClick={() => onInfoClick && onInfoClick(emotion)}
             >
-              <button 
-                className="info-slot-btn" 
-                onClick={(e) => { e.stopPropagation(); onInfoClick && onInfoClick(emotion); }}
-                title="Informacje o emocji"
-              >
-                <Info size={14} />
-              </button>
-              <button 
-                className="clear-slot-btn" 
-                onClick={(e) => { e.stopPropagation(); onClearSlot(position); }}
-                title="Usuń ze slotu"
-              >
-                <X size={14} />
-              </button>
+              <div className="slot-circle">
+                <button 
+                  className="info-slot-btn" 
+                  onClick={(e) => { e.stopPropagation(); onInfoClick && onInfoClick(emotion); }}
+                  title="Informacje o emocji"
+                >
+                  <Info size={14} />
+                </button>
+                <button 
+                  className="clear-slot-btn" 
+                  onClick={(e) => { e.stopPropagation(); onClearSlot(position); }}
+                  title="Usuń ze slotu"
+                >
+                  <X size={14} />
+                </button>
+              </div>
               <span className="slot-name">{emotion.name}</span>
             </motion.div>
           ) : (

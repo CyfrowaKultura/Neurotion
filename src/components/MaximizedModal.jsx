@@ -66,13 +66,14 @@ export default function MaximizedModal({ emotions, isOpen, onClose, unlockedEmot
             margin: '0 auto',
             justifyItems: 'center',
             alignItems: 'center',
-            pointerEvents: 'none',
+            pointerEvents: 'auto', // Allowed so the container can be scrolled
             maxHeight: '90vh',
             overflowY: 'auto',
             padding: isMobile ? '40px 10px' : '40px 20px',
-            boxSizing: 'border-box'
+            boxSizing: 'border-box',
+            WebkitOverflowScrolling: 'touch' // Smooth scrolling on iOS
           }}
-          onClick={(e) => e.stopPropagation()}
+          // Removed stopPropagation here so clicks on empty space bubble up and close the modal
         >
           {emotions.map((emotion, index) => {
             const isUnlocked = unlockedEmotionIds.includes(emotion.id);
