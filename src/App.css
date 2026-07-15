@@ -68,6 +68,7 @@
   border-radius: 40px;
   border: 1px solid rgba(0,0,0,0.05);
   box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+  overflow: hidden; /* For watercolor background */
 }
 
 /* Clean up background glowing - we want minimal style */

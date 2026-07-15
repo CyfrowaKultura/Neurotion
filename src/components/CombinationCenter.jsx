@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, X, Pencil, Info } from 'lucide-react';
 import './CombinationCenter.css';
 import CombinationHints from './CombinationHints';
+import WatercolorAnimation from './WatercolorAnimation';
 
 export default function CombinationCenter({ isMobile, leftEmotion, rightEmotion, onCombine, onDrop, onClearSlot, onInfoClick, isFailed, editMode, onToggleEdit, unlockedEmotionIds, allEmotionsMap, failedHintId, onHintClick }) {
   const [isCombining, setIsCombining] = useState(false);
@@ -110,6 +111,11 @@ export default function CombinationCenter({ isMobile, leftEmotion, rightEmotion,
 
   return (
     <div className="combination-center">
+      <WatercolorAnimation 
+        leftColor={leftEmotion?.color} 
+        rightColor={rightEmotion?.color} 
+        isActive={!!leftEmotion && !!rightEmotion} 
+      />
       <CombinationHints 
         leftEmotion={leftEmotion} 
         rightEmotion={rightEmotion} 
