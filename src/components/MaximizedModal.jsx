@@ -14,6 +14,7 @@ export default function MaximizedModal({ emotions, isOpen, onClose, unlockedEmot
   const isMobile = window.innerWidth <= 768;
 
   const getGridCols = (count) => {
+    if (isMobile) return 1; // Always 1 column on mobile
     if (count === 1) return 1;
     if (count === 2) return 2;
     if (count === 3) return 3;
