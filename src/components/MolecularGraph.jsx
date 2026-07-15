@@ -591,7 +591,11 @@ export default function MolecularGraph({ unlockedEmotions, allEmotionsMap, onNod
       const n = nodesRef.current[dragRef.current.idx];
       if (n) {
         if (editMode) {
-          if (!dragRef.current.moved) n.permanentlyPinned = !n.permanentlyPinned;
+          if (dragRef.current.moved) {
+            n.permanentlyPinned = true;
+          } else {
+            n.permanentlyPinned = !n.permanentlyPinned;
+          }
           n.pinned = !!n.permanentlyPinned;
         } else {
           n.pinned = false;
@@ -626,10 +630,12 @@ export default function MolecularGraph({ unlockedEmotions, allEmotionsMap, onNod
     <canvas
       ref={canvasRef}
       className={`molecular-canvas ${side}`}
-      onMouseDown={onDown}
-      onMouseMove={onMove}
-      onMouseUp={onUp}
-      onMouseLeave={onLeave}
+      style={{ touchAction: 'none' }}
+      onPointerDown={onDown}
+      onPointerMove={onMove}
+      onPointerUp={onUp}
+      onPointerLeave={onLeave}
+      onPointerCancel={onLeave}
     />
   );
 }
