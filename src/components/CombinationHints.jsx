@@ -70,8 +70,9 @@ export default function CombinationHints({ leftEmotion, rightEmotion, unlockedEm
       <div style={{ 
         display: 'flex', 
         gap: '12px', 
-        width: 'max-content', 
-        margin: '0 auto'
+        width: 'max-content',
+        padding: '0 16px', // Add some padding so it doesn't touch the edge when scrolled
+        margin: '0' // explicitly remove margin auto
       }}>
       <AnimatePresence mode="popLayout">
         {hints.map((hint, i) => {
