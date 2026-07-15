@@ -154,13 +154,25 @@ export default function EmotionListModal({
                                   {idx > 0 && <span>+</span>}
                                   <span 
                                     className="ingredient-tag" 
-                                    style={{ opacity: isIngredientUnlocked ? 1 : 0.5 }}
+                                    style={{ 
+                                      opacity: isIngredientUnlocked ? 1 : 0.5,
+                                      cursor: isIngredientUnlocked ? 'pointer' : 'default',
+                                      display: 'inline-flex',
+                                      alignItems: 'center',
+                                      gap: '4px'
+                                    }}
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       if (isIngredientUnlocked && ing) onEmotionClick(ing);
                                     }}
                                   >
-                                    {isIngredientUnlocked && ing ? ing.name : '???'}
+                                    {isIngredientUnlocked ? (
+                                      ing ? ing.name : '???'
+                                    ) : (
+                                      <>
+                                        {ing ? ing.name : '???'} <Lock size={10} color="#888" />
+                                      </>
+                                    )}
                                   </span>
                                 </React.Fragment>
                               );
