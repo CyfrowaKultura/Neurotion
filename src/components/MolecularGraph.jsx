@@ -136,9 +136,16 @@ export default function MolecularGraph({ unlockedEmotions, allEmotionsMap, onNod
 
   // Resize
   useEffect(() => {
-    const onResize = () => syncSize();
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    
+    const observer = new ResizeObserver(() => {
+      syncSize();
+    });
+    
+    observer.observe(canvas);
+    
+    return () => observer.disconnect();
   }, [syncSize]);
 
 
