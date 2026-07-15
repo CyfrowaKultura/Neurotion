@@ -53,12 +53,8 @@ export default function CombinationHints({ leftEmotion, rightEmotion, unlockedEm
   if (!leftEmotion || !rightEmotion) return null;
 
   return (
-    <div style={{
+    <div className="hide-scrollbar" style={{
       display: 'flex',
-      gap: '12px',
-      justifyContent: hints.length > 3 && window.innerWidth <= 768 ? 'flex-start' : 'center',
-      marginBottom: '16px',
-      height: '42px', // Slightly taller
       width: '100%',
       overflowX: 'auto',
       overflowY: 'hidden',
@@ -66,10 +62,17 @@ export default function CombinationHints({ leftEmotion, rightEmotion, unlockedEm
       scrollbarWidth: 'none', // Firefox
       msOverflowStyle: 'none', // IE/Edge
       padding: '0 16px',
-      boxSizing: 'border-box'
+      boxSizing: 'border-box',
+      marginBottom: '16px',
+      height: '42px',
     }}>
       <style>{`.hide-scrollbar::-webkit-scrollbar { display: none; }`}</style>
-      <div className="hide-scrollbar" style={{ display: 'flex', gap: '12px', width: 'max-content', margin: hints.length <= 3 || window.innerWidth > 768 ? '0 auto' : '0' }}>
+      <div style={{ 
+        display: 'flex', 
+        gap: '12px', 
+        width: 'max-content', 
+        margin: '0 auto'
+      }}>
       <AnimatePresence mode="popLayout">
         {hints.map((hint, i) => {
           const isUnlocked = unlockedEmotionIds.includes(hint.id);
@@ -101,7 +104,9 @@ export default function CombinationHints({ leftEmotion, rightEmotion, unlockedEm
                 fontSize: '0.8rem',
                 backdropFilter: 'blur(10px)',
                 cursor: 'pointer',
-                fontWeight: isHighlighted ? 'bold' : 'normal'
+                fontWeight: isHighlighted ? 'bold' : 'normal',
+                flexShrink: 0,
+                whiteSpace: 'nowrap'
               }}
             >
               <div style={{
@@ -109,7 +114,8 @@ export default function CombinationHints({ leftEmotion, rightEmotion, unlockedEm
                 height: '8px',
                 borderRadius: '50%',
                 background: hint.color,
-                boxShadow: `0 0 5px ${hint.color}88`
+                boxShadow: `0 0 5px ${hint.color}88`,
+                flexShrink: 0
               }} />
               {isUnlocked ? (
                 <span style={{ fontWeight: 500 }}>{hint.name}</span>

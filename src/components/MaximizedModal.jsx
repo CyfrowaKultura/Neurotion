@@ -184,8 +184,10 @@ export default function MaximizedModal({ emotions, isOpen, onClose, unlockedEmot
                     background: 'rgba(255,255,255,0.05)', 
                     borderRadius: '16px',
                     border: '1px solid rgba(255,255,255,0.1)',
-                    padding: isMobile ? '10px' : '2.5rem',
-                    height: isMobile ? '550px' : 'auto',
+                    padding: isMobile ? '40px 10px 10px 10px' : '2.5rem',
+                    width: '100%',
+                    height: 'auto',
+                    boxSizing: 'border-box',
                     display: 'flex',
                     flexDirection: 'column'
                   }}>
