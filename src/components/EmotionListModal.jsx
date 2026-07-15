@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
+import { X, Lock } from 'lucide-react';
 import { combinations, categories } from '../data/emotions';
 import './EmotionListModal.css';
 
@@ -11,20 +11,30 @@ export default function EmotionListModal({
   allEmotionsMap, 
   onEmotionClick 
 }) {
+  const [showUnlocked, setShowUnlocked] = useState(true);
+
   if (!isOpen) return null;
 
   const isMobile = window.innerWidth <= 768;
 
-  // Group unlocked emotions by category
+  const allEmotionIds = Array.from(allEmotionsMap.keys());
+  const lockedEmotionIds = allEmotionIds.filter(id => !unlockedEmotionIds.includes(id));
+
+  const currentIds = showUnlocked ? unlockedEmotionIds : lockedEmotionIds;
+
+  // Group current emotions by category
   const groupedEmotions = {};
-  unlockedEmotionIds.forEach(id => {
+  currentIds.forEach(id => {
     const emotion = allEmotionsMap.get(id);
     if (!emotion) return;
     
-    if (!groupedEmotions[emotion.categoryId]) {
-      groupedEmotions[emotion.categoryId] = [];
+    // Fallback to primary category if base emotion or unknown
+    const categoryId = emotion.categoryId || (categories.find(c => c.id === emotion.id) ? emotion.id : 'unknown');
+    
+    if (!groupedEmotions[categoryId]) {
+      groupedEmotions[categoryId] = [];
     }
-    groupedEmotions[emotion.categoryId].push(emotion);
+    groupedEmotions[categoryId].push(emotion);
   });
 
   return (
@@ -68,6 +78,38 @@ export default function EmotionListModal({
         >
           <div className="emotion-list-header">
             <h2>Księga Emocji</h2>
+            <div style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
+              <button 
+                onClick={() => setShowUnlocked(true)}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '20px',
+                  border: 'none',
+                  background: showUnlocked ? '#333' : '#e0e0e0',
+                  color: showUnlocked ? '#fff' : '#666',
+                  cursor: 'pointer',
+                  fontWeight: showUnlocked ? 'bold' : 'normal',
+                  transition: 'all 0.2s'
+                }}
+              >
+                Odkryte ({unlockedEmotionIds.length})
+              </button>
+              <button 
+                onClick={() => setShowUnlocked(false)}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '20px',
+                  border: 'none',
+                  background: !showUnlocked ? '#333' : '#e0e0e0',
+                  color: !showUnlocked ? '#fff' : '#666',
+                  cursor: 'pointer',
+                  fontWeight: !showUnlocked ? 'bold' : 'normal',
+                  transition: 'all 0.2s'
+                }}
+              >
+                Nieodkryte ({lockedEmotionIds.length})
+              </button>
+            </div>
           </div>
 
           <div className="emotion-list-body">
@@ -89,31 +131,36 @@ export default function EmotionListModal({
                       <div 
                         key={emotion.id} 
                         className="emotion-item"
-                        onClick={() => onEmotionClick(emotion)}
+                        onClick={() => {
+                          if (showUnlocked) onEmotionClick(emotion);
+                        }}
+                        style={{ cursor: showUnlocked ? 'pointer' : 'default', opacity: showUnlocked ? 1 : 0.7 }}
                       >
                         <div className="emotion-item-header">
                           <div className="emotion-color-dot" style={{ background: emotion.color }}></div>
-                          <span className="emotion-item-name">{emotion.name}</span>
+                          <span className="emotion-item-name" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            {emotion.name} {!showUnlocked && <Lock size={14} color="#888" />}
+                          </span>
                         </div>
                         
-                        {!isBaseEmotion && (
+                        {showUnlocked && !isBaseEmotion && (
                           <div className="emotion-item-ingredients" onClick={(e) => e.stopPropagation()}>
                             <span style={{ marginRight: '4px' }}>Z:</span>
                             {combo.ingredients.map((ingId, idx) => {
                               const ing = allEmotionsMap.get(ingId);
-                              const isUnlocked = unlockedEmotionIds.includes(ingId);
+                              const isIngredientUnlocked = unlockedEmotionIds.includes(ingId);
                               return (
                                 <React.Fragment key={idx}>
                                   {idx > 0 && <span>+</span>}
                                   <span 
                                     className="ingredient-tag" 
-                                    style={{ opacity: isUnlocked ? 1 : 0.5 }}
+                                    style={{ opacity: isIngredientUnlocked ? 1 : 0.5 }}
                                     onClick={(e) => {
                                       e.stopPropagation();
-                                      if (isUnlocked && ing) onEmotionClick(ing);
+                                      if (isIngredientUnlocked && ing) onEmotionClick(ing);
                                     }}
                                   >
-                                    {isUnlocked && ing ? ing.name : '???'}
+                                    {isIngredientUnlocked && ing ? ing.name : '???'}
                                   </span>
                                 </React.Fragment>
                               );

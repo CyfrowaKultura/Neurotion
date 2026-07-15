@@ -161,7 +161,7 @@ export default function MaximizedModal({ emotions, isOpen, onClose, unlockedEmot
                     
                     <div className="modal-body">
                       <p className="modal-desc" style={{ fontSize: '18px', lineHeight: '1.6' }}>{emotion.description}</p>
-                      {combo && allEmotionsMap && (
+                      {isUnlocked && combo && allEmotionsMap && (
                         <div className="modal-source" style={{ marginTop: '24px', paddingTop: '16px', borderTop: '1px solid rgba(0,0,0,0.05)', display: 'flex', justifyContent: 'center' }}>
                           <div className="source-ingredients" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                             <div className="ingredient-tag" style={{ background: `${allEmotionsMap.get(combo.ingredients[0])?.color}22`, color: allEmotionsMap.get(combo.ingredients[0])?.color, padding: '4px 12px', borderRadius: '12px', fontSize: '13px', fontWeight: 600 }}>
