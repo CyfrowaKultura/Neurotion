@@ -562,8 +562,11 @@ export default function MolecularGraph({ unlockedEmotions, allEmotionsMap, onNod
       n.pinned = true;
       n.vx = 0; n.vy = 0;
       dragRef.current = { idx, startX: n.x, startY: n.y, moved: false };
+    } else {
+      dragRef.current = null;
+      activeCatRef.current = null;
     }
-  }, [getXY, findNode]);
+  }, [getXY, findNode, onMapInteraction]);
 
   const onMove = useCallback((e) => {
     const { x, y } = getXY(e);
