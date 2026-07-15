@@ -114,18 +114,23 @@ function App() {
     if (position === 'left') setLeftSelectedId(null);
     else setRightSelectedId(null);
   };
+  const [failedHintId, setFailedHintId] = useState(null);
 
   const handleCombine = () => {
     if (!leftSelectedId || !rightSelectedId) return;
 
     const matchedCombinations = getCombination(leftSelectedId, rightSelectedId);
     
-    if (matchedCombinations.length > 0) {
+    const predefined = matchedCombinations.filter(c => !c.isDynamic);
+    const dynamic = matchedCombinations.filter(c => c.isDynamic);
+
+    if (predefined.length > 0) {
       setIsFailed(false);
       setFailedAttempts(0);
       setHintedEmotion(null);
+      setFailedHintId(null);
       
-      const newEmotions = matchedCombinations.map(c => c.result);
+      const newEmotions = predefined.map(c => c.result);
       const newIds = newEmotions.map(e => e.id);
       
       setUnlockedEmotionIds(prev => {
@@ -141,26 +146,17 @@ function App() {
       
     } else {
       setIsFailed(true);
-      const nextFailed = failedAttempts + 1;
-      setFailedAttempts(nextFailed);
-      
-      if (nextFailed >= 3 && !hintedEmotion) {
-        const availableCombos = combinations.filter(c => 
-           !unlockedEmotionIds.includes(c.result.id) &&
-           unlockedEmotionIds.includes(c.ingredients[0]) &&
-           unlockedEmotionIds.includes(c.ingredients[1])
-        );
-        if (availableCombos.length > 0) {
-          const randomCombo = availableCombos[Math.floor(Math.random() * availableCombos.length)];
-          const hint = randomCombo.ingredients[Math.floor(Math.random() * 2)];
-          setHintedEmotion(hint);
-        }
+      if (navigator.vibrate) navigator.vibrate([200]); // vibrate on error
+
+      if (dynamic.length > 0) {
+        setFailedHintId(dynamic[0].result.id);
+      } else {
+        setFailedHintId(null);
       }
 
       setTimeout(() => {
         setIsFailed(false);
-        setLeftSelectedId(null);
-        setRightSelectedId(null);
+        // We do NOT clear leftSelectedId and rightSelectedId so user can see the hints
       }, 500);
     }
   };
@@ -255,6 +251,8 @@ function App() {
           isFailed={isFailed}
           unlockedEmotionIds={unlockedEmotionIds}
           allEmotionsMap={allEmotions}
+          failedHintId={failedHintId}
+          onHintClick={(emotion) => setMaximizedEmotions([emotion])}
         />
       </div>
 

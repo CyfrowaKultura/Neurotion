@@ -115,32 +115,34 @@ export default function MaximizedModal({ emotions, isOpen, onClose, unlockedEmot
                     minHeight: isMobile ? '480px' : 'auto'
                   }}>
                     {/* Slot Assignment Buttons */}
-                    <div style={{ position: 'absolute', top: '0px', left: '0px', zIndex: 10, display: 'flex', gap: '8px' }}>
-                      <button 
-                        onClick={() => onAssignSlot1 && onAssignSlot1(emotion.id)}
-                        style={{
-                          width: '32px', height: '32px', borderRadius: '50%',
-                          background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.1)',
-                          cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          fontFamily: 'Outfit, sans-serif', fontWeight: 'bold', color: '#555'
-                        }}
-                        title="Umieść w slocie 1"
-                      >
-                        1
-                      </button>
-                      <button 
-                        onClick={() => onAssignSlot2 && onAssignSlot2(emotion.id)}
-                        style={{
-                          width: '32px', height: '32px', borderRadius: '50%',
-                          background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.1)',
-                          cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          fontFamily: 'Outfit, sans-serif', fontWeight: 'bold', color: '#555'
-                        }}
-                        title="Umieść w slocie 2"
-                      >
-                        2
-                      </button>
-                    </div>
+                    {isUnlocked && (
+                      <div style={{ position: 'absolute', top: '0px', left: '0px', zIndex: 10, display: 'flex', gap: '8px' }}>
+                        <button 
+                          onClick={() => onAssignSlot1 && onAssignSlot1(emotion.id)}
+                          style={{
+                            width: '32px', height: '32px', borderRadius: '50%',
+                            background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.1)',
+                            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            fontFamily: 'Outfit, sans-serif', fontWeight: 'bold', color: '#555'
+                          }}
+                          title="Umieść w slocie 1"
+                        >
+                          1
+                        </button>
+                        <button 
+                          onClick={() => onAssignSlot2 && onAssignSlot2(emotion.id)}
+                          style={{
+                            width: '32px', height: '32px', borderRadius: '50%',
+                            background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.1)',
+                            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            fontFamily: 'Outfit, sans-serif', fontWeight: 'bold', color: '#555'
+                          }}
+                          title="Umieść w slocie 2"
+                        >
+                          2
+                        </button>
+                      </div>
+                    )}
 
                     {isMobile && isSingle && (
                       <button 
@@ -159,7 +161,7 @@ export default function MaximizedModal({ emotions, isOpen, onClose, unlockedEmot
                     
                     <div className="modal-body">
                       <p className="modal-desc" style={{ fontSize: '18px', lineHeight: '1.6' }}>{emotion.description}</p>
-                      {isUnlocked && combo && allEmotionsMap && (
+                      {combo && allEmotionsMap && (
                         <div className="modal-source" style={{ marginTop: '24px', paddingTop: '16px', borderTop: '1px solid rgba(0,0,0,0.05)', display: 'flex', justifyContent: 'center' }}>
                           <div className="source-ingredients" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                             <div className="ingredient-tag" style={{ background: `${allEmotionsMap.get(combo.ingredients[0])?.color}22`, color: allEmotionsMap.get(combo.ingredients[0])?.color, padding: '4px 12px', borderRadius: '12px', fontSize: '13px', fontWeight: 600 }}>

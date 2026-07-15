@@ -4,7 +4,7 @@ import { Sparkles, X, Pencil, Info } from 'lucide-react';
 import './CombinationCenter.css';
 import CombinationHints from './CombinationHints';
 
-export default function CombinationCenter({ isMobile, leftEmotion, rightEmotion, onCombine, onDrop, onClearSlot, onInfoClick, isFailed, editMode, onToggleEdit, unlockedEmotionIds, allEmotionsMap }) {
+export default function CombinationCenter({ isMobile, leftEmotion, rightEmotion, onCombine, onDrop, onClearSlot, onInfoClick, isFailed, editMode, onToggleEdit, unlockedEmotionIds, allEmotionsMap, failedHintId, onHintClick }) {
   const [isCombining, setIsCombining] = useState(false);
   const [dragOverLeft, setDragOverLeft] = useState(false);
   const [dragOverRight, setDragOverRight] = useState(false);
@@ -113,6 +113,8 @@ export default function CombinationCenter({ isMobile, leftEmotion, rightEmotion,
         rightEmotion={rightEmotion} 
         unlockedEmotionIds={unlockedEmotionIds} 
         allEmotionsMap={allEmotionsMap} 
+        failedHintId={failedHintId}
+        onHintClick={onHintClick}
       />
 
       <div className="slots-container">

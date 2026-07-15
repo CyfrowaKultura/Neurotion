@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Lock } from 'lucide-react';
 import { combinations } from '../data/emotions'; // To filter only combinations
 
-export default function CombinationHints({ leftEmotion, rightEmotion, unlockedEmotionIds, allEmotionsMap }) {
+export default function CombinationHints({ leftEmotion, rightEmotion, unlockedEmotionIds, allEmotionsMap, failedHintId, onHintClick }) {
   const hints = useMemo(() => {
     if (!leftEmotion || !rightEmotion || !allEmotionsMap) return [];
 
@@ -73,25 +73,35 @@ export default function CombinationHints({ leftEmotion, rightEmotion, unlockedEm
       <AnimatePresence mode="popLayout">
         {hints.map((hint, i) => {
           const isUnlocked = unlockedEmotionIds.includes(hint.id);
+          const isHighlighted = hint.id === failedHintId;
 
           return (
             <motion.div
               key={hint.id}
               initial={{ opacity: 0, y: 10, scale: 0.9 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
+              animate={{ 
+                opacity: 1, 
+                y: 0, 
+                scale: isHighlighted ? 1.05 : 1,
+                boxShadow: isHighlighted ? `0 0 15px ${hint.color}` : 'none',
+                borderColor: isHighlighted ? hint.color : 'rgba(0,0,0,0.08)'
+              }}
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ delay: i * 0.05 }}
+              onClick={() => onHintClick && onHintClick(hint)}
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: '6px',
-                background: 'rgba(0,0,0,0.03)',
-                border: '1px solid rgba(0,0,0,0.08)',
+                background: isHighlighted ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.03)',
+                border: '1px solid',
                 padding: '4px 12px',
                 borderRadius: '16px',
                 color: isUnlocked ? '#333' : '#888',
                 fontSize: '0.8rem',
-                backdropFilter: 'blur(10px)'
+                backdropFilter: 'blur(10px)',
+                cursor: 'pointer',
+                fontWeight: isHighlighted ? 'bold' : 'normal'
               }}
             >
               <div style={{
